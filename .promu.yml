@@ -1,0 +1,22 @@
+verbose: false
+go:
+  version: 1.15.1
+  cgo: false
+repository:
+  path: github.com/ifooth/drone-ci-enhanced
+build:
+  binaries:
+    - name: drone_enhanced
+      path: cmd
+  flags: -a -tags netgo
+  ldflags: |
+    -s
+    -X {{repoPath}}/version.Version={{.Version}}
+    -X {{repoPath}}/version.Revision={{.Revision}}
+    -X {{repoPath}}/version.Branch={{.Branch}}
+    -X {{repoPath}}/version.BuildUser={{user}}@{{host}}
+    -X {{repoPath}}/version.BuildDate={{date "20060102-15:04:05"}}
+crossbuild:
+  platforms:
+    - linux/amd64
+    - darwin/amd64
