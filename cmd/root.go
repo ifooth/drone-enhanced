@@ -14,9 +14,9 @@ var (
 	cfgFile string
 
 	rootCmd = &cobra.Command{
-		Use:   "botprime",
-		Short: "A spider utils for funny",
-		Long:  `BotPrime is a spider utils for funny`,
+		Use:   "drone_enhanced",
+		Short: "drone ci enhanced server",
+		Long:  `A drone ci full enhanced server`,
 	}
 )
 
@@ -58,10 +58,10 @@ func initConfig() {
 func versionCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "version",
-		Short: "Print the version number of BotPrime",
-		Long:  `All software has versions. This is BotPrime's`,
+		Short: "Print the version number of drone_enhanced",
+		Long:  `All software has versions. This is drone_enhanced's`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(version.Print("botprime"))
+			fmt.Println(version.Print("drone_enhanced"))
 		},
 	}
 	return cmd
