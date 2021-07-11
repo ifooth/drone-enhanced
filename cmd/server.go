@@ -26,6 +26,7 @@ func ServerCmd() *cobra.Command {
 }
 
 func runServerCmd(conf *serverConfig) {
+	logrus.SetLevel(logrus.DebugLevel)
 	handler := pluginConfig.Handler(config.NewConfigPlugin(), "", logrus.StandardLogger())
 
 	logrus.Infof("server listening on address %s", conf.httpAddress)
