@@ -3,6 +3,7 @@ module github.com/ifooth/drone-ci-enhanced
 go 1.15
 
 require (
+	code.gitea.io/sdk/gitea v0.14.1
 	github.com/drone/drone-go v1.5.0
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/mitchellh/go-homedir v1.1.0
@@ -10,6 +11,6 @@ require (
 	github.com/sirupsen/logrus v1.7.0
 	github.com/spf13/cobra v1.1.3
 	github.com/spf13/viper v1.7.0
-	github.com/stretchr/testify v1.7.0 // indirect
+	github.com/stretchr/testify v1.7.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

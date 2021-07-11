@@ -43,7 +43,7 @@ func runServerCmd(conf *serverConfig) {
 
 	logrus.Infof("server listening on address %s", conf.httpAddress)
 
-	http.Handle("/", handler)
+	http.Handle("/api/v1/plugin/config", handler)
 	logrus.Fatal(http.ListenAndServe(conf.httpAddress, nil))
 }
 
