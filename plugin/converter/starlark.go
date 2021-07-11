@@ -6,6 +6,7 @@ import (
 
 	"github.com/drone/drone-go/drone"
 	pluginConverter "github.com/drone/drone-go/plugin/converter"
+	"github.com/ifooth/drone-ci-enhanced/filediff"
 	"github.com/ifooth/drone-ci-enhanced/plugin/converter/starlark"
 	"github.com/ifooth/drone-ci-enhanced/providers"
 )
@@ -22,7 +23,7 @@ func (p *StarlarkPlugin) Convert(ctx context.Context, req *pluginConverter.Reque
 	return nil, nil
 }
 
-func (p *StarlarkPlugin) ConvertContent(ctx context.Context, req *pluginConverter.Request, fileEntry providers.FileListingEntry) (string, error) {
+func (p *StarlarkPlugin) ConvertContent(ctx context.Context, req *pluginConverter.Request, fileEntry providers.FileListingEntry, filediffs []*filediff.FileDiff) (string, error) {
 	if !p.IsValidFilename(fileEntry.Name) {
 		return "", nil
 	}
@@ -32,7 +33,7 @@ func (p *StarlarkPlugin) ConvertContent(ctx context.Context, req *pluginConverte
 		return "", err
 	}
 
-	droneConfig, err := starlark.Parse(req, fileEntry.Name, content)
+	droneConfig, err := starlark.Parse(req, fileEntry.Name, content, filediffs)
 	if err != nil {
 		return "", err
 	}

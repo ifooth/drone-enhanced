@@ -37,6 +37,13 @@ func (p *ConfigPlugin) Find(ctx context.Context, req *pluginConfig.Request) (*dr
 	fileListing, err := p.provider.GetFileListing(ctx, req.Repo.Namespace, req.Repo.Name, req.Build.After, ".drone")
 	if err != nil {
 		logrus.Debugf(".drone not exist, just ignore")
+		return nil, nil
+	}
+
+	fileDiffs, err := p.provider.ChangedFilesInDiff(ctx, req.Repo.Namespace, req.Repo.Name, req.Build.Before, req.Build.After)
+	if err != nil {
+		logrus.Debugf(".drone not exist, just ignore")
+		return nil, nil
 	}
 
 	converReq := &pluginConverter.Request{Repo: req.Repo, Build: req.Build, Config: drone.Config{}}
@@ -49,7 +56,7 @@ func (p *ConfigPlugin) Find(ctx context.Context, req *pluginConfig.Request) (*dr
 		}
 
 		if yamlConverter.IsValidFilename(file.Name) {
-			droneConfig, err := yamlConverter.ConvertContent(ctx, converReq, file)
+			droneConfig, err := yamlConverter.ConvertContent(ctx, converReq, file, fileDiffs)
 			if err != nil {
 				logrus.Warn("yaml convert content error, %s", err)
 				continue
@@ -61,7 +68,7 @@ func (p *ConfigPlugin) Find(ctx context.Context, req *pluginConfig.Request) (*dr
 		}
 
 		if starlarkConverter.IsValidFilename(file.Name) {
-			droneConfig, err := starlarkConverter.ConvertContent(ctx, converReq, file)
+			droneConfig, err := starlarkConverter.ConvertContent(ctx, converReq, file, fileDiffs)
 			if err != nil {
 				logrus.Warn("yaml convert content error, %s", err)
 				continue

@@ -6,6 +6,7 @@ import (
 
 	"github.com/drone/drone-go/drone"
 	pluginConverter "github.com/drone/drone-go/plugin/converter"
+	"github.com/ifooth/drone-ci-enhanced/filediff"
 	"github.com/ifooth/drone-ci-enhanced/providers"
 )
 
@@ -21,7 +22,7 @@ func (p *YamlPlugin) Convert(ctx context.Context, req *pluginConverter.Request) 
 	return nil, nil
 }
 
-func (p *YamlPlugin) ConvertContent(ctx context.Context, req *pluginConverter.Request, fileEntry providers.FileListingEntry) (string, error) {
+func (p *YamlPlugin) ConvertContent(ctx context.Context, req *pluginConverter.Request, fileEntry providers.FileListingEntry, filediffs []*filediff.FileDiff) (string, error) {
 	if !p.IsValidFilename(fileEntry.Name) {
 		return "", nil
 	}

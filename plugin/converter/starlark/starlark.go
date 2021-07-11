@@ -19,6 +19,7 @@ import (
 	"errors"
 
 	pluginConverter "github.com/drone/drone-go/plugin/converter"
+	"github.com/ifooth/drone-ci-enhanced/filediff"
 	"github.com/sirupsen/logrus"
 	"go.starlark.net/starlark"
 )
@@ -53,7 +54,7 @@ var (
 	ErrCannotLoad = errors.New("starlark: cannot load external scripts")
 )
 
-func Parse(req *pluginConverter.Request, name string, content string) (string, error) {
+func Parse(req *pluginConverter.Request, name string, content string, filediffs []*filediff.FileDiff) (string, error) {
 	thread := &starlark.Thread{
 		Name: "drone",
 		Load: noLoad,
@@ -84,7 +85,7 @@ func Parse(req *pluginConverter.Request, name string, content string) (string, e
 
 	// create the input args and invoke the main method
 	// using the input args.
-	args := createArgs(&req.Repo, &req.Build, nil)
+	args := createArgs(&req.Repo, &req.Build, nil, filediffs)
 
 	// set the maximum number of operations in the script. this
 	// mitigates long running scripts.

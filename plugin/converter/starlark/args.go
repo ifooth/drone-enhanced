@@ -2,19 +2,21 @@ package starlark
 
 import (
 	"github.com/drone/drone-go/drone"
-
 	"go.starlark.net/starlark"
 	"go.starlark.net/starlarkstruct"
+
+	"github.com/ifooth/drone-ci-enhanced/filediff"
 )
 
-func createArgs(repo *drone.Repo, build *drone.Build, input map[string]interface{}) []starlark.Value {
+func createArgs(repo *drone.Repo, build *drone.Build, input map[string]interface{}, filediffs []*filediff.FileDiff) []starlark.Value {
 	return []starlark.Value{
 		starlarkstruct.FromStringDict(
 			starlark.String("context"),
 			starlark.StringDict{
-				"repo":  starlarkstruct.FromStringDict(starlark.String("repo"), fromRepo(repo)),
-				"build": starlarkstruct.FromStringDict(starlark.String("build"), fromBuild(build)),
-				"input": starlarkstruct.FromStringDict(starlark.String("input"), fromInput(input)),
+				"repo":      starlarkstruct.FromStringDict(starlark.String("repo"), fromRepo(repo)),
+				"build":     starlarkstruct.FromStringDict(starlark.String("build"), fromBuild(build)),
+				"input":     starlarkstruct.FromStringDict(starlark.String("input"), fromInput(input)),
+				"filediffs": fromFileDiffDict(filediffs),
 			},
 		),
 	}
@@ -28,6 +30,24 @@ func fromInput(input map[string]interface{}) starlark.StringDict {
 		}
 	}
 	return out
+}
+
+func fromFileDiffDict(filediffs []*filediff.FileDiff) *starlark.List {
+	list := new(starlark.List)
+	for _, v := range filediffs {
+		df := fromFileDiff(v)
+		list.Append(starlarkstruct.FromStringDict(starlark.String("filediff"), df))
+	}
+	return list
+}
+
+func fromFileDiff(v *filediff.FileDiff) starlark.StringDict {
+	return starlark.StringDict{
+		"name":       starlark.String(v.Name),
+		"path":       starlark.String(v.Path),
+		"type":       starlark.String(v.Type),
+		"extensions": fromMap(v.Extensions),
+	}
 }
 
 func fromBuild(v *drone.Build) starlark.StringDict {

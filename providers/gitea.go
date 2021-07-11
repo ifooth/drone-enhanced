@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"code.gitea.io/sdk/gitea"
+	"github.com/ifooth/drone-ci-enhanced/filediff"
 )
 
 type GiteaCredential struct {
@@ -53,4 +54,25 @@ func (c *GiteaClient) GetFileContent(ctx context.Context, namespace string, name
 
 	data, _, err := c.delegate.GetFile(namespace, name, commitRef, path)
 	return fmt.Sprintf("%s", data), err
+}
+
+func (c *GiteaClient) ChangedFilesInDiff(ctx context.Context, namespace string, name string, base string, head string) ([]*filediff.FileDiff, error) {
+	c.delegate.SetContext(ctx)
+
+	commit, _, err := c.delegate.GetSingleCommit(namespace, name, head)
+	if err != nil {
+		return nil, err
+	}
+
+	diffs := make([]*filediff.FileDiff, 0, len(commit.Files))
+	for _, v := range commit.Files {
+		d := &filediff.FileDiff{
+			Name:       v.Filename,
+			Path:       v.Filename,
+			Type:       "file",
+			Extensions: map[string]string{},
+		}
+		diffs = append(diffs, d)
+	}
+	return diffs, nil
 }
