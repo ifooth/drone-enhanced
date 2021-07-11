@@ -29,6 +29,11 @@ func ServerCmd() *cobra.Command {
 }
 
 func runServerCmd(conf *serverConfig) {
+	logFormatter := new(logrus.TextFormatter)
+	logFormatter.TimestampFormat = "2006-01-02 15:04:05"
+	logFormatter.FullTimestamp = true
+	logrus.SetFormatter(logFormatter)
+
 	spec := new(envSpec)
 	if err := envconfig.Process("", spec); err != nil {
 		logrus.Fatal(err)
