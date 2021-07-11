@@ -7,23 +7,27 @@ import (
 	"github.com/drone/drone-go/drone"
 	pluginConfig "github.com/drone/drone-go/plugin/config"
 	"github.com/sirupsen/logrus"
+
+	"github.com/ifooth/drone-ci-enhanced/providers"
 )
 
-type Config struct{}
-
-func NewConfigPlugin() *Config {
-	return &Config{}
+type ConfigPlugin struct {
+	provider providers.Provider
 }
 
-func (c *Config) Find(ctx context.Context, req *pluginConfig.Request) (*drone.Config, error) {
+func NewConfigPlugin(provider providers.Provider) *ConfigPlugin {
+	return &ConfigPlugin{provider: provider}
+}
+
+func (p *ConfigPlugin) Find(ctx context.Context, req *pluginConfig.Request) (*drone.Config, error) {
 	reqBody, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
 	logrus.Debugf("request body: %s", reqBody)
 
-	if req.Build.Target == "drone-ci-enhanced" {
-		return &drone.Config{Data: ""}, nil
-	}
-	return nil, nil
+	content, err := p.provider.GetFileContent(ctx, req.Repo.Namespace, req.Repo.Name, req.Build.After, ".drone.yml")
+
+	config := &drone.Config{Data: content}
+	return config, nil
 }

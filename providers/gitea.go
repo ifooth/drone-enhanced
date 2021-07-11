@@ -14,13 +14,10 @@ type GiteaCredential struct {
 }
 
 type GiteaClient struct {
-	delegate  *gitea.Client
-	namespace string
-	name      string
-	commitRef string
+	delegate *gitea.Client
 }
 
-func NewGiteaClient(namespace string, name string, commitRef string, cred *GiteaCredential) (*GiteaClient, error) {
+func NewGiteaClient(cred *GiteaCredential) (*GiteaClient, error) {
 	client, err := gitea.NewClient(cred.URL, gitea.SetToken(cred.Token))
 	if err != nil {
 		return nil, err
@@ -30,23 +27,20 @@ func NewGiteaClient(namespace string, name string, commitRef string, cred *Gitea
 	}
 
 	giteaClient := &GiteaClient{
-		delegate:  client,
-		namespace: namespace,
-		name:      name,
-		commitRef: commitRef,
+		delegate: client,
 	}
 	return giteaClient, nil
 }
 
-func (c *GiteaClient) GetFileListing(ctx context.Context, path string) ([]FileListingEntry, error) {
+func (c *GiteaClient) GetFileListing(ctx context.Context, namespace string, name string, commitRef string, path string) (fileListing []FileListingEntry, err error) {
 	c.delegate.SetContext(ctx)
 
-	contents, _, err := c.delegate.ListContents(c.namespace, c.name, c.commitRef, path)
+	contents, _, err := c.delegate.ListContents(namespace, name, commitRef, path)
 	if err != nil {
 		return nil, err
 	}
 
-	fileListing := make([]FileListingEntry, 0, len(contents))
+	fileListing = make([]FileListingEntry, 0, len(contents))
 	for _, content := range contents {
 		entry := FileListingEntry{Type: content.Type, Name: content.Name, Path: content.Path}
 		fileListing = append(fileListing, entry)
@@ -54,9 +48,9 @@ func (c *GiteaClient) GetFileListing(ctx context.Context, path string) ([]FileLi
 	return fileListing, nil
 }
 
-func (c *GiteaClient) GetFileContent(ctx context.Context, path string) (fileContent string, err error) {
+func (c *GiteaClient) GetFileContent(ctx context.Context, namespace string, name string, commitRef string, path string) (fileContent string, err error) {
 	c.delegate.SetContext(ctx)
 
-	data, _, err := c.delegate.GetFile(c.namespace, c.name, c.commitRef, path)
+	data, _, err := c.delegate.GetFile(namespace, name, commitRef, path)
 	return fmt.Sprintf("%s", data), err
 }

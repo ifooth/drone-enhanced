@@ -4,10 +4,12 @@ import (
 	"net/http"
 
 	pluginConfig "github.com/drone/drone-go/plugin/config"
-	"github.com/ifooth/drone-ci-enhanced/plugin/config"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+
+	"github.com/ifooth/drone-ci-enhanced/plugin/config"
+	"github.com/ifooth/drone-ci-enhanced/providers"
 )
 
 func ServerCmd() *cobra.Command {
@@ -39,7 +41,19 @@ func runServerCmd(conf *serverConfig) {
 		logrus.Fatalln("missing secret key")
 	}
 
-	handler := pluginConfig.Handler(config.NewConfigPlugin(), spec.Secret, logrus.StandardLogger())
+	var provider providers.Provider
+	var err error
+
+	switch spec.Provider {
+	case "GITEA":
+		cred := &providers.GiteaCredential{URL: spec.GiteaURL, Token: spec.GiteaToken, Debug: spec.Debug}
+		provider, err = providers.NewGiteaClient(cred)
+		if err != nil {
+			logrus.Fatal(err)
+		}
+	}
+
+	handler := pluginConfig.Handler(config.NewConfigPlugin(provider), spec.Secret, logrus.StandardLogger())
 
 	logrus.Infof("server listening on address %s", conf.httpAddress)
 
@@ -48,8 +62,11 @@ func runServerCmd(conf *serverConfig) {
 }
 
 type envSpec struct {
-	Debug  bool   `envconfig:"PLUGIN_DEBUG"`
-	Secret string `envconfig:"PLUGIN_SECRET"`
+	Debug      bool   `envconfig:"PLUGIN_DEBUG"`
+	Secret     string `envconfig:"PLUGIN_SECRET"`
+	Provider   string `envconfig:"Provider"`
+	GiteaURL   string `envconfig:"GITEA_URL"`
+	GiteaToken string `envconfig:"GITEA_TOKEN"`
 }
 
 type serverConfig struct {

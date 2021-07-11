@@ -15,9 +15,9 @@ func TestGiteaGetFileListing(t *testing.T) {
 		Token: os.Getenv("TEST_TOKEN"),
 		Debug: true,
 	}
-	client, err := NewGiteaClient(os.Getenv("TEST_NAMESPACE"), os.Getenv("TEST_NAME"), os.Getenv("TEST_COMMITREF"), cred)
+	client, err := NewGiteaClient(cred)
 	assert.NoError(t, err)
-	entrys, err := client.GetFileListing(ctx, "")
+	entrys, err := client.GetFileListing(ctx, os.Getenv("TEST_NAMESPACE"), os.Getenv("TEST_NAME"), os.Getenv("TEST_COMMITREF"), "")
 	assert.NoError(t, err)
 	assert.NotEmpty(t, entrys)
 	t.Log(entrys)
@@ -30,9 +30,9 @@ func TestGiteaGetFileContent(t *testing.T) {
 		Token: os.Getenv("TEST_TOKEN"),
 		Debug: true,
 	}
-	client, err := NewGiteaClient(os.Getenv("TEST_NAMESPACE"), os.Getenv("TEST_NAME"), os.Getenv("TEST_COMMITREF"), cred)
+	client, err := NewGiteaClient(cred)
 	assert.NoError(t, err)
-	content, err := client.GetFileContent(ctx, ".drone.yml")
+	content, err := client.GetFileContent(ctx, os.Getenv("TEST_NAMESPACE"), os.Getenv("TEST_NAME"), os.Getenv("TEST_COMMITREF"), ".drone.yml")
 	assert.NoError(t, err)
 	assert.NotEmpty(t, content)
 	t.Log(content)
