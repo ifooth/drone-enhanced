@@ -5,6 +5,7 @@ import (
 
 	pluginConfig "github.com/drone/drone-go/plugin/config"
 	"github.com/ifooth/drone-ci-enhanced/plugin/config"
+	"github.com/kelseyhightower/envconfig"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -26,13 +27,29 @@ func ServerCmd() *cobra.Command {
 }
 
 func runServerCmd(conf *serverConfig) {
-	logrus.SetLevel(logrus.DebugLevel)
-	handler := pluginConfig.Handler(config.NewConfigPlugin(), "", logrus.StandardLogger())
+	spec := new(envSpec)
+	if err := envconfig.Process("", spec); err != nil {
+		logrus.Fatal(err)
+	}
+
+	if spec.Debug {
+		logrus.SetLevel(logrus.DebugLevel)
+	}
+	if spec.Secret == "" {
+		logrus.Fatalln("missing secret key")
+	}
+
+	handler := pluginConfig.Handler(config.NewConfigPlugin(), spec.Secret, logrus.StandardLogger())
 
 	logrus.Infof("server listening on address %s", conf.httpAddress)
 
 	http.Handle("/", handler)
 	logrus.Fatal(http.ListenAndServe(conf.httpAddress, nil))
+}
+
+type envSpec struct {
+	Debug  bool   `envconfig:"PLUGIN_DEBUG"`
+	Secret string `envconfig:"PLUGIN_SECRET"`
 }
 
 type serverConfig struct {

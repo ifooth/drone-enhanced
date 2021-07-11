@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/drone/drone-go v1.5.0
+	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/prometheus/common v0.29.0
 	github.com/sirupsen/logrus v1.7.0
