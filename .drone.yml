@@ -11,3 +11,14 @@ steps:
       - go get -u -v github.com/prometheus/promu@v0.12.0
       - promu build
       - ./drone_enhanced version
+
+  - name: build docker
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: ifooth/drone-ci-enhanced
+      tags:
+        - latest
