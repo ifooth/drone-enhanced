@@ -39,7 +39,7 @@ func (p *ConfigPlugin) Find(ctx context.Context, req *pluginConfig.Request) (*dr
 
 	for _, file := range fileListing {
 		if f, _ := p.FindYaml(ctx, req, file); f != "" {
-			content = content + f
+			content = droneConfigAppend(content, f)
 		}
 
 	}
@@ -65,4 +65,20 @@ func (p *ConfigPlugin) FindYaml(ctx context.Context, req *pluginConfig.Request, 
 	content, err := p.provider.GetFileContent(ctx, req.Repo.Namespace, req.Repo.Name, req.Build.After, fileEntry.Path)
 
 	return content, nil
+}
+
+func droneConfigAppend(droneConfig string, appends ...string) string {
+	for _, a := range appends {
+		a = strings.Trim(a, " \n")
+		if a != "" {
+			if !strings.HasPrefix(a, "---\n") {
+				a = "---\n" + a
+			}
+			droneConfig += a
+			if !strings.HasSuffix(droneConfig, "\n") {
+				droneConfig += "\n"
+			}
+		}
+	}
+	return droneConfig
 }
