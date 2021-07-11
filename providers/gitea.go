@@ -3,6 +3,7 @@ package providers
 import (
 	"context"
 	"fmt"
+	"path"
 
 	"code.gitea.io/sdk/gitea"
 	"github.com/ifooth/drone-ci-enhanced/filediff"
@@ -67,7 +68,7 @@ func (c *GiteaClient) ChangedFilesInDiff(ctx context.Context, namespace string, 
 	diffs := make([]*filediff.FileDiff, 0, len(commit.Files))
 	for _, v := range commit.Files {
 		d := &filediff.FileDiff{
-			Name:       v.Filename,
+			Name:       path.Base(v.Filename),
 			Path:       v.Filename,
 			Type:       "file",
 			Extensions: map[string]string{},
