@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: build_drone_enhanced
+name: build-drone-enhanced
 
 steps:
   - name: build
@@ -10,7 +10,7 @@ steps:
       - export GO111MODULE=on
       - go get -u -v github.com/prometheus/promu@v0.12.0
       - promu build
-      - ./drone_enhanced version
+      - ./drone-enhanced version
 
   - name: build docker
     image: plugins/docker
@@ -19,6 +19,6 @@ steps:
         from_secret: docker_username
       password:
         from_secret: docker_password
-      repo: ifooth/drone-ci-enhanced
+      repo: ifooth/drone-enhanced
       tags:
         - latest
