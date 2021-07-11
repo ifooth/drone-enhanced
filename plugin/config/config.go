@@ -7,8 +7,10 @@ import (
 
 	"github.com/drone/drone-go/drone"
 	pluginConfig "github.com/drone/drone-go/plugin/config"
+	pluginConverter "github.com/drone/drone-go/plugin/converter"
 	"github.com/sirupsen/logrus"
 
+	"github.com/ifooth/drone-ci-enhanced/plugin/converter"
 	"github.com/ifooth/drone-ci-enhanced/providers"
 )
 
@@ -37,34 +39,44 @@ func (p *ConfigPlugin) Find(ctx context.Context, req *pluginConfig.Request) (*dr
 		logrus.Debugf(".drone not exist, just ignore")
 	}
 
+	converReq := &pluginConverter.Request{Repo: req.Repo, Build: req.Build, Config: drone.Config{}}
+	yamlConverter := converter.NewYamlPlugin(p.provider)
+	starlarkConverter := converter.NewStarlarkPlugin(p.provider)
+
 	for _, file := range fileListing {
-		if f, _ := p.FindYaml(ctx, req, file); f != "" {
-			content = droneConfigAppend(content, f)
+		if file.Type != "file" {
+			continue
 		}
 
+		if yamlConverter.IsValidFilename(file.Name) {
+			droneConfig, err := yamlConverter.ConvertContent(ctx, converReq, file)
+			if err != nil {
+				logrus.Warn("yaml convert content error, %s", err)
+				continue
+			}
+			if content != "" {
+				content = droneConfigAppend(content, droneConfig)
+			}
+
+		}
+
+		if starlarkConverter.IsValidFilename(file.Name) {
+			droneConfig, err := starlarkConverter.ConvertContent(ctx, converReq, file)
+			if err != nil {
+				logrus.Warn("yaml convert content error, %s", err)
+				continue
+			}
+			if content != "" {
+				content = droneConfigAppend(content, droneConfig)
+			}
+
+		}
 	}
 
 	config := &drone.Config{Data: content}
 	logrus.Debugf("render content: %s", config.Data)
 
 	return config, nil
-}
-
-func (p *ConfigPlugin) FindYaml(ctx context.Context, req *pluginConfig.Request, fileEntry providers.FileListingEntry) (fileContent string, err error) {
-	if fileEntry.Type != "file" {
-		return "", nil
-	}
-
-	switch {
-	case strings.HasSuffix(fileEntry.Name, ".yaml"):
-	case strings.HasSuffix(fileEntry.Name, ".yml"):
-	default:
-		return "", nil
-	}
-
-	content, err := p.provider.GetFileContent(ctx, req.Repo.Namespace, req.Repo.Name, req.Build.After, fileEntry.Path)
-
-	return content, nil
 }
 
 func droneConfigAppend(droneConfig string, appends ...string) string {
