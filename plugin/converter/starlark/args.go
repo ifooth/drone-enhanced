@@ -16,7 +16,7 @@ func createArgs(repo *drone.Repo, build *drone.Build, input map[string]interface
 				"repo":      starlarkstruct.FromStringDict(starlark.String("repo"), fromRepo(repo)),
 				"build":     starlarkstruct.FromStringDict(starlark.String("build"), fromBuild(build)),
 				"input":     starlarkstruct.FromStringDict(starlark.String("input"), fromInput(input)),
-				"filediffs": fromFileDiffDict(filediffs),
+				"filediffs": fromFileDiffList(filediffs),
 			},
 		),
 	}
@@ -32,22 +32,21 @@ func fromInput(input map[string]interface{}) starlark.StringDict {
 	return out
 }
 
-func fromFileDiffDict(filediffs []*filediff.FileDiff) *starlark.List {
+func fromFileDiffList(filediffs []*filediff.FileDiff) *starlark.List {
 	list := new(starlark.List)
 	for _, v := range filediffs {
-		df := fromFileDiff(v)
-		list.Append(starlarkstruct.FromStringDict(starlark.String("filediff"), df))
+		list.Append(fromFileDiffDict(v))
 	}
 	return list
 }
 
-func fromFileDiff(v *filediff.FileDiff) starlark.StringDict {
-	return starlark.StringDict{
-		"name":       starlark.String(v.Name),
-		"path":       starlark.String(v.Path),
-		"type":       starlark.String(v.Type),
-		"extensions": fromMap(v.Extensions),
-	}
+func fromFileDiffDict(v *filediff.FileDiff) *starlark.Dict {
+	dict := new(starlark.Dict)
+	dict.SetKey(starlark.String("name"), starlark.String(v.Name))
+	dict.SetKey(starlark.String("path"), starlark.String(v.Path))
+	dict.SetKey(starlark.String("type"), starlark.String(v.Type))
+	dict.SetKey(starlark.String("extensions"), fromMap(v.Extensions))
+	return dict
 }
 
 func fromBuild(v *drone.Build) starlark.StringDict {
