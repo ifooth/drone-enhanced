@@ -46,25 +46,34 @@ func runServerCmd(conf *serverConfig) {
 
 	switch spec.Provider {
 	case "GITEA":
+		if spec.GiteaURL == "" {
+			logrus.Fatalln("missing GITEA_URL")
+		}
+		if spec.GiteaToken == "" {
+			logrus.Fatalln("missing GITEA_TOKEN")
+		}
+
 		cred := &providers.GiteaCredential{URL: spec.GiteaURL, Token: spec.GiteaToken, Debug: spec.Debug}
 		provider, err = providers.NewGiteaClient(cred)
 		if err != nil {
 			logrus.Fatal(err)
 		}
+	default:
+		logrus.Fatalln("missing SCM_PROVIDER")
 	}
 
-	handler := pluginConfig.Handler(config.NewConfigPlugin(provider), spec.Secret, logrus.StandardLogger())
+	configPluginHandler := pluginConfig.Handler(config.NewConfigPlugin(provider), spec.Secret, logrus.StandardLogger())
 
 	logrus.Infof("server listening on address %s", conf.httpAddress)
 
-	http.Handle("/api/v1/plugin/config", handler)
+	http.Handle("/api/v1/plugin/config", configPluginHandler)
 	logrus.Fatal(http.ListenAndServe(conf.httpAddress, nil))
 }
 
 type envSpec struct {
 	Debug      bool   `envconfig:"PLUGIN_DEBUG"`
 	Secret     string `envconfig:"PLUGIN_SECRET"`
-	Provider   string `envconfig:"Provider"`
+	Provider   string `envconfig:"SCM_PROVIDER"`
 	GiteaURL   string `envconfig:"GITEA_URL"`
 	GiteaToken string `envconfig:"GITEA_TOKEN"`
 }
