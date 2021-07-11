@@ -10,8 +10,8 @@ import (
 	pluginConverter "github.com/drone/drone-go/plugin/converter"
 	"github.com/sirupsen/logrus"
 
-	"github.com/ifooth/drone-ci-enhanced/plugin/converter"
-	"github.com/ifooth/drone-ci-enhanced/providers"
+	"github.com/ifooth/drone-enhanced/plugin/converter"
+	"github.com/ifooth/drone-enhanced/providers"
 )
 
 type ConfigPlugin struct {

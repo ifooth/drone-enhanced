@@ -13,6 +13,6 @@ RUN promu build
 
 FROM alpine:3.14
 
-COPY --from=builder /app/drone_enhanced /usr/local/bin/drone_enhanced
+COPY --from=builder /app/drone_enhanced /usr/local/bin/drone-enhanced
 
-CMD ["/usr/local/bin/drone_enhanced", "server", "--http-address", "0.0.0.0:8080"]
+CMD ["drone-enhanced", "server", "--http-address", "0.0.0.0:8080"]

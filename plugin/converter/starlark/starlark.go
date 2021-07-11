@@ -19,7 +19,7 @@ import (
 	"errors"
 
 	pluginConverter "github.com/drone/drone-go/plugin/converter"
-	"github.com/ifooth/drone-ci-enhanced/filediff"
+	"github.com/ifooth/drone-enhanced/filediff"
 	"github.com/sirupsen/logrus"
 	"go.starlark.net/starlark"
 )

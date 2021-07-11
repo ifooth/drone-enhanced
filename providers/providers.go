@@ -3,7 +3,7 @@ package providers
 import (
 	"context"
 
-	"github.com/ifooth/drone-ci-enhanced/filediff"
+	"github.com/ifooth/drone-enhanced/filediff"
 )
 
 type FileListingEntry struct {

@@ -6,7 +6,7 @@ import (
 	"path"
 
 	"code.gitea.io/sdk/gitea"
-	"github.com/ifooth/drone-ci-enhanced/filediff"
+	"github.com/ifooth/drone-enhanced/filediff"
 )
 
 type GiteaCredential struct {

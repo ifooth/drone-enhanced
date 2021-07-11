@@ -8,8 +8,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 
-	"github.com/ifooth/drone-ci-enhanced/plugin/config"
-	"github.com/ifooth/drone-ci-enhanced/providers"
+	"github.com/ifooth/drone-enhanced/plugin/config"
+	"github.com/ifooth/drone-enhanced/providers"
 )
 
 func ServerCmd() *cobra.Command {

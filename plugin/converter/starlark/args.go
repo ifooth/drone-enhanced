@@ -5,7 +5,7 @@ import (
 	"go.starlark.net/starlark"
 	"go.starlark.net/starlarkstruct"
 
-	"github.com/ifooth/drone-ci-enhanced/filediff"
+	"github.com/ifooth/drone-enhanced/filediff"
 )
 
 func createArgs(repo *drone.Repo, build *drone.Build, input map[string]interface{}, filediffs []*filediff.FileDiff) []starlark.Value {

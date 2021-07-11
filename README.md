@@ -1,6 +1,6 @@
-# drone-ci-enhanced
+# drone-enhanced
 
-[![Build Status](https://cloud.drone.io/api/badges/ifooth/drone-ci-enhanced/status.svg)](https://cloud.drone.io/ifooth/drone-ci-enhanced)
+[![Build Status](https://cloud.drone.io/api/badges/ifooth/drone-enhanced/status.svg)](https://cloud.drone.io/ifooth/drone-enhanced)
 
 ## Feature
 - support directory config(suport jsonnet and starlark)

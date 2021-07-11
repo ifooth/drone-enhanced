@@ -3,10 +3,10 @@ go:
   version: 1.15.1
   cgo: false
 repository:
-  path: github.com/ifooth/drone-ci-enhanced
+  path: github.com/ifooth/drone-enhanced
 build:
   binaries:
-    - name: drone_enhanced
+    - name: drone-enhanced
       path: cmd
   flags: -a -tags netgo
   ldflags: |

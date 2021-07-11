@@ -1,4 +1,4 @@
-module github.com/ifooth/drone-ci-enhanced
+module github.com/ifooth/drone-enhanced
 
 go 1.15
 
