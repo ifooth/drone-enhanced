@@ -2,5 +2,5 @@
 
 * [FEATURE] add support directory configs
 * [FEATURE] add support `yaml`, `starlark` mixed configuration
-* [FEATURE] add filechange args for starlark
-* [FEATURE] add gitea scm
+* [FEATURE] add filediffs args for `starlark`
+* [FEATURE] add gitea scm provider

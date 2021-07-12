@@ -22,3 +22,31 @@ steps:
       repo: ifooth/drone-enhanced
       tags:
         - latest
+
+---
+kind: pipeline
+type: docker
+name: release
+
+steps:
+  - name: build
+    image: ifooth/promu:v0.12.0
+    commands:
+      - promu build
+      - echo -n "v`cat VERSION`" > .tags
+
+  - name: release docker
+    image: plugins/docker
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      repo: ifooth/drone-enhanced
+
+  - name: release binaries
+    image: ifooth/promu:v0.12.0
+    commands:
+      - promu crossbuild tarballs
+      - promu checksum .tarballs
+      - promu release .tarballs

@@ -17,3 +17,4 @@
 .tarballs
 /drone-enhanced*
 .envrc
+.tags
