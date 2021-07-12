@@ -47,6 +47,10 @@ steps:
     image: golang:1.15
     commands:
       - make build
+      - promu crossbuild
       - promu crossbuild tarballs
       - promu checksum .tarballs
       - promu release .tarballs
+    environment:
+      GITHUB_TOKEN:
+        from_secret: GITHUB_TOKEN
