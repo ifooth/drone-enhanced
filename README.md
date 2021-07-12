@@ -12,5 +12,5 @@
 - [ ] support all scm(include github, bitbucket, gitea)
 
 ## Similar projects
-- https://github.com/bitsbeats/drone-tree-config/tree/master/plugin
-- https://github.com/meltwater/drone-convert-pathschanged
+- [drone-tree-config](https://github.com/bitsbeats/drone-tree-config)
+- [drone-convert-pathschanged](https://github.com/meltwater/drone-convert-pathschanged)
