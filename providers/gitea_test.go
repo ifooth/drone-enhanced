@@ -11,9 +11,9 @@ import (
 func TestGiteaGetFileListing(t *testing.T) {
 	ctx := context.Background()
 	cred := &GiteaCredential{
-		URL:   os.Getenv("TEST_URL"),
-		Token: os.Getenv("TEST_TOKEN"),
-		Debug: true,
+		Server: os.Getenv("TEST_URL"),
+		Token:  os.Getenv("TEST_TOKEN"),
+		Debug:  true,
 	}
 	client, err := NewGiteaClient(cred)
 	assert.NoError(t, err)
@@ -26,9 +26,9 @@ func TestGiteaGetFileListing(t *testing.T) {
 func TestGiteaGetFileContent(t *testing.T) {
 	ctx := context.Background()
 	cred := &GiteaCredential{
-		URL:   os.Getenv("TEST_URL"),
-		Token: os.Getenv("TEST_TOKEN"),
-		Debug: true,
+		Server: os.Getenv("TEST_URL"),
+		Token:  os.Getenv("TEST_TOKEN"),
+		Debug:  true,
 	}
 	client, err := NewGiteaClient(cred)
 	assert.NoError(t, err)
@@ -41,9 +41,9 @@ func TestGiteaGetFileContent(t *testing.T) {
 func TestGiteaChangedFilesInDiff(t *testing.T) {
 	ctx := context.Background()
 	cred := &GiteaCredential{
-		URL:   os.Getenv("TEST_URL"),
-		Token: os.Getenv("TEST_TOKEN"),
-		Debug: true,
+		Server: os.Getenv("TEST_URL"),
+		Token:  os.Getenv("TEST_TOKEN"),
+		Debug:  true,
 	}
 	client, err := NewGiteaClient(cred)
 	assert.NoError(t, err)

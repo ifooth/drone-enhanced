@@ -10,9 +10,9 @@ import (
 )
 
 type GiteaCredential struct {
-	URL   string
-	Token string
-	Debug bool
+	Server string
+	Token  string
+	Debug  bool
 }
 
 type GiteaClient struct {
@@ -20,7 +20,7 @@ type GiteaClient struct {
 }
 
 func NewGiteaClient(cred *GiteaCredential) (*GiteaClient, error) {
-	client, err := gitea.NewClient(cred.URL, gitea.SetToken(cred.Token))
+	client, err := gitea.NewClient(cred.Server, gitea.SetToken(cred.Token))
 	if err != nil {
 		return nil, err
 	}

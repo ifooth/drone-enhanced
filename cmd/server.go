@@ -46,25 +46,26 @@ func runServerCmd(conf *serverConfig) {
 		logrus.Fatalln("missing secret key")
 	}
 
+	if spec.ProviderToken == "" {
+		logrus.Fatalln("missing PROVIDER_TOKEN")
+	}
+
 	var provider providers.Provider
 	var err error
 
 	switch spec.Provider {
 	case "GITEA":
-		if spec.GiteaURL == "" {
-			logrus.Fatalln("missing GITEA_URL")
-		}
-		if spec.GiteaToken == "" {
-			logrus.Fatalln("missing GITEA_TOKEN")
+		if spec.ProviderServer == "" {
+			logrus.Fatalln("missing PROVIDER_SERVER")
 		}
 
-		cred := &providers.GiteaCredential{URL: spec.GiteaURL, Token: spec.GiteaToken, Debug: spec.Debug}
+		cred := &providers.GiteaCredential{Server: spec.ProviderServer, Token: spec.ProviderToken, Debug: spec.Debug}
 		provider, err = providers.NewGiteaClient(cred)
 		if err != nil {
 			logrus.Fatal(err)
 		}
 	default:
-		logrus.Fatalln("missing SCM_PROVIDER")
+		logrus.Fatalln("missing PROVIDER")
 	}
 
 	configPluginHandler := pluginConfig.Handler(config.NewConfigPlugin(provider), spec.Secret, logrus.StandardLogger())
@@ -76,11 +77,11 @@ func runServerCmd(conf *serverConfig) {
 }
 
 type envSpec struct {
-	Debug      bool   `envconfig:"PLUGIN_DEBUG"`
-	Secret     string `envconfig:"PLUGIN_SECRET"`
-	Provider   string `envconfig:"SCM_PROVIDER"`
-	GiteaURL   string `envconfig:"GITEA_URL"`
-	GiteaToken string `envconfig:"GITEA_TOKEN"`
+	Debug          bool   `envconfig:"PLUGIN_DEBUG"`
+	Secret         string `envconfig:"PLUGIN_SECRET"`
+	Provider       string `envconfig:"PROVIDER"`
+	ProviderServer string `envconfig:"PROVIDER_SERVER"`
+	ProviderToken  string `envconfig:"PROVIDER_TOKEN"`
 }
 
 type serverConfig struct {
