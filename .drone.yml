@@ -10,7 +10,7 @@ steps:
       - make build
       - ./drone-enhanced version
 
-  - name: build docker
+  - name: release nightly docker
     image: plugins/docker
     settings:
       username:
@@ -44,9 +44,14 @@ steps:
       repo: ifooth/drone-enhanced
 
   - name: release binaries
-    image: golang:1.15
+    image: docker:20.10.7
     commands:
-      - make build
+      - |
+        export VERSION=0.12.0 && \
+        wget -q https://github.com/prometheus/promu/releases/download/v${VERSION}/promu-${VERSION}.linux-amd64.tar.gz && \
+        tar -xf promu-${VERSION}.linux-amd64.tar.gz && \
+        mv promu-${VERSION}.linux-amd64/promu /bin && \
+        rm -rf promu-*
       - promu crossbuild
       - promu crossbuild tarballs
       - promu checksum .tarballs
