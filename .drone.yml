@@ -1,15 +1,13 @@
 ---
 kind: pipeline
 type: docker
-name: build-drone-enhanced
+name: nightly build
 
 steps:
   - name: build
     image: golang:1.15
     commands:
-      - export GO111MODULE=on
-      - go get -u -v github.com/prometheus/promu@v0.12.0
-      - promu build
+      - make build
       - ./drone-enhanced version
 
   - name: build docker
@@ -30,9 +28,10 @@ name: release
 
 steps:
   - name: build
-    image: ifooth/promu:v0.12.0
+    image: golang:1.15
     commands:
-      - promu build
+      - make build
+      - ./drone-enhanced version
       - echo -n "v`cat VERSION`" > .tags
 
   - name: release docker
@@ -45,8 +44,9 @@ steps:
       repo: ifooth/drone-enhanced
 
   - name: release binaries
-    image: ifooth/promu:v0.12.0
+    image: golang:1.15
     commands:
+      - make build
       - promu crossbuild tarballs
       - promu checksum .tarballs
       - promu release .tarballs
