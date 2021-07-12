@@ -65,7 +65,7 @@ func runServerCmd(conf *serverConfig) {
 			logrus.Fatal(err)
 		}
 	default:
-		logrus.Fatalln("missing PROVIDER")
+		logrus.Fatalln("missing PROVIDER or not support")
 	}
 
 	configPluginHandler := pluginConfig.Handler(config.NewConfigPlugin(provider), spec.Secret, logrus.StandardLogger())
