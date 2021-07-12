@@ -47,10 +47,9 @@ steps:
     image: docker:20.10.7
     commands:
       - |
-        export VERSION=0.12.0 && \
-        wget -q https://github.com/prometheus/promu/releases/download/v${VERSION}/promu-${VERSION}.linux-amd64.tar.gz && \
-        tar -xf promu-${VERSION}.linux-amd64.tar.gz && \
-        mv promu-${VERSION}.linux-amd64/promu /bin && \
+        wget -q https://github.com/prometheus/promu/releases/download/v0.12.0/promu-0.12.0.linux-amd64.tar.gz && \
+        tar -xf promu-0.12.0.linux-amd64.tar.gz && \
+        mv promu-0.12.0.linux-amd64/promu /bin && \
         rm -rf promu-*
       - promu crossbuild
       - promu crossbuild tarballs
