@@ -15,8 +15,8 @@ import (
 func ServerCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "server",
-		Short: "serve extension api",
-		Long:  `serve extension api for drone ci`,
+		Short: "Serve drone's extension api",
+		Long:  `Serve extension api for drone ci`,
 	}
 
 	conf := &serverConfig{}
