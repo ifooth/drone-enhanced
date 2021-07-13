@@ -61,9 +61,6 @@ steps:
         path: /usr/bin/docker
 
 trigger:
-  ref:
-    - refs/heads/release-*
-    - refs/tags/*
   event:
     - custom
     - promote
