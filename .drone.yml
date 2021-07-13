@@ -32,7 +32,7 @@ steps:
     commands:
       - make build
       - ./drone-enhanced version
-      - echo -n "cat VERSION`" > .tags
+      - echo -n `cat VERSION` > .tags
 
   - name: release docker
     image: plugins/docker
