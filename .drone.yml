@@ -44,13 +44,9 @@ steps:
       repo: ifooth/drone-enhanced
 
   - name: release binaries
-    image: docker:20.10.7
+    image: golang:1.15
     commands:
-      - |
-        wget -q https://github.com/prometheus/promu/releases/download/v0.12.0/promu-0.12.0.linux-amd64.tar.gz && \
-        tar -xf promu-0.12.0.linux-amd64.tar.gz && \
-        mv promu-0.12.0.linux-amd64/promu /bin && \
-        rm -rf promu-*
+      - make promu
       - promu crossbuild
       - promu crossbuild tarballs
       - promu checksum .tarballs
@@ -61,8 +57,13 @@ steps:
     volumes:
       - name: docker-socket
         path: /var/run/docker.sock
+      - name: docker-bin
+        path: /usr/bin/docker
 
 volumes:
   - name: docker-socket
     host:
       path: /var/run/docker.sock
+  - name: docker-bin
+    host:
+      path: /usr/bin/docker
