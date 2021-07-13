@@ -1,0 +1,4 @@
+.build
+.tarballs
+/drone-enhanced*
+.envrc
