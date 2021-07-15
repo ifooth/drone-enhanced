@@ -8,7 +8,22 @@ import (
 var argVersion = regexp.MustCompile(`ARG VERSION=(?P<version>[\w\-\.]+)`)
 
 func ParseDockerfileVersion(content string) string {
-	match := argVersion.FindStringSubmatch(content)
+	lines := strings.Split(content, "\n")
+
+	// 拿最后一个版本号
+	version := ""
+
+	for _, line := range lines {
+		_version := ParseDockerfileVersionLine(line)
+		if _version != "" {
+			version = _version
+		}
+	}
+	return version
+}
+
+func ParseDockerfileVersionLine(line string) string {
+	match := argVersion.FindStringSubmatch(line)
 	if len(match) == 0 {
 		return ""
 	}
