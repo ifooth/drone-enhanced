@@ -58,25 +58,25 @@ func (p *ConfigPlugin) Find(ctx context.Context, req *pluginConfig.Request) (*dr
 		if yamlConverter.IsValidFilename(file.Name) {
 			droneConfig, err := yamlConverter.ConvertContent(ctx, converReq, file, fileDiffs)
 			if err != nil {
-				logrus.Warn("yaml convert content error, %s", err)
+				logrus.Warnf("yaml convert content error, %s", err)
 				continue
 			}
+
 			if content != "" {
 				content = droneConfigAppend(content, droneConfig)
 			}
-
 		}
 
 		if starlarkConverter.IsValidFilename(file.Name) {
 			droneConfig, err := starlarkConverter.ConvertContent(ctx, converReq, file, fileDiffs)
 			if err != nil {
-				logrus.Warn("yaml convert content error, %s", err)
+				logrus.Warnf("yaml convert content error, %s", err)
 				continue
 			}
+
 			if content != "" {
 				content = droneConfigAppend(content, droneConfig)
 			}
-
 		}
 	}
 
