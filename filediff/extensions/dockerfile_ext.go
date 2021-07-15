@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-var argVersion = regexp.MustCompile(`ARG VERSION=(?P<version>[\w\-\.]+)`)
+var argVersion = regexp.MustCompile(`(?i)[ARG|ENV|LABEL]{1} VERSION=(?P<version>[\w\-\.]+)`)
 
 func ParseDockerfileVersion(content string) string {
 	lines := strings.Split(content, "\n")
