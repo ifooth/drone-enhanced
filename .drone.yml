@@ -20,6 +20,9 @@ steps:
       repo: ifooth/drone-enhanced
       tags:
         - latest
+    when:
+      event:
+        - promote
 
 ---
 kind: pipeline
