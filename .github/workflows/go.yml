@@ -44,7 +44,7 @@ jobs:
         run: |
           make promu
           export PATH="`go env GOPATH`/bin;$PATH"
-          promu crossbuild
-          promu crossbuild tarballs
-          promu checksum .tarballs
-          promu release .tarballs
+          /home/runner/go/bin/promu crossbuild
+          /home/runner/go/bin/promu crossbuild tarballs
+          /home/runner/go/bin/promu checksum .tarballs
+          /home/runner/go/bin/promu release .tarballs
