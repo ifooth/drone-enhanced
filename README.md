@@ -3,7 +3,7 @@
 [drone-ci](https://www.drone.io/) enhanced, pipeline as code complete solution for drone, support jsonnet, starlark, cron as your want
 
 [![Build Status](https://cloud.drone.io/api/badges/ifooth/drone-enhanced/status.svg)](https://cloud.drone.io/ifooth/drone-enhanced)
-[![go workflow](https://github.com/ifooth/drone-enhanced/actions/workflows/go.yml/badge.svg)](https://github.com/ifooth/drone-enhanced/actions)
+[![Go](https://github.com/ifooth/drone-enhanced/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/ifooth/drone-enhanced/actions/workflows/go.yml)
 
 ## Feature
 - [x] support directory configs
