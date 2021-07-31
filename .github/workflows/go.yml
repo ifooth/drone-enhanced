@@ -41,6 +41,8 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
 
       - name: Cross build check.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           make promu
           export PATH="`go env GOPATH`/bin;$PATH"
