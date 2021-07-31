@@ -43,4 +43,4 @@ jobs:
       - name: Cross build check.
         run: |
           make promu
-          promu crossbuild
+          /home/runner/go/bin/promu crossbuild
