@@ -26,8 +26,6 @@ jobs:
   cross-build-check:
     runs-on: ubuntu-latest
     name: Go build for different platform
-    env:
-      GOBIN: /tmp/.bin
     steps:
       - name: Install Go.
         uses: actions/setup-go@v1
