@@ -1,4 +1,4 @@
-name: Manually release workflow
+name: Release
 on:
   workflow_dispatch:
     inputs:
